@@ -1,7 +1,8 @@
-package com.example.simpleLanguage
+package com.example.simpleLanguage.mainscreen.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.simpleLanguage.R
 
 class MainActivity : AppCompatActivity() {
 
