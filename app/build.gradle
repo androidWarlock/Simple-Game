@@ -51,4 +51,8 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:${rootConfiguration.daggerVersion}"
     kapt "com.google.dagger:dagger-android-processor:$rootConfiguration.daggerVersion"
 
+
+    //coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootConfiguration.coroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootConfiguration.coroutineVersion"
 }

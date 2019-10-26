@@ -1,7 +1,7 @@
 package com.example.simpleLanguage.mainscreen.data.repository
 
-import android.provider.UserDictionary
+import com.example.simpleLanguage.mainscreen.data.entity.Word
 
 interface MainScreenRepository {
-    fun getWordsList(): List<UserDictionary.Words>?
+    suspend fun getWordsList(): List<Word>?
 }
