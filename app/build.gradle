@@ -1,8 +1,9 @@
+def rootConfiguration = rootProject.ext
+
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -14,6 +15,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "HOME_BASE_URL", "\"https://gist.githubusercontent.com/DroidCoder/7ac6cdb4bf5e032f4c737aaafe659b33/raw/baa9fe0d586082d85db71f346e2b039c580c5804/words.json\""
+
     }
     buildTypes {
         release {
@@ -32,4 +36,19 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+
+    //Retrofit - Network calls
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${rootConfiguration.retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-gson:${rootConfiguration.retrofitVersion}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${rootConfiguration.okhttpLoggingInterceptorVersion}"
+
+
+    // Dagger - Dependency Injection
+    implementation "com.google.dagger:dagger:${rootConfiguration.daggerVersion}"
+    implementation "com.google.dagger:dagger-android:$rootConfiguration.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootConfiguration.daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:${rootConfiguration.daggerVersion}"
+    kapt "com.google.dagger:dagger-android-processor:$rootConfiguration.daggerVersion"
+
 }
