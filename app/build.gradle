@@ -55,4 +55,17 @@ dependencies {
     //coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootConfiguration.coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootConfiguration.coroutineVersion"
+
+
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootConfiguration.archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime:$rootConfiguration.archLifecycleVersion"
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootConfiguration.archLifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$rootConfiguration.archLifecycleVersion"
+
+
+
 }
+
+
+
