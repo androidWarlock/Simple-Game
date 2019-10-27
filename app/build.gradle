@@ -30,13 +30,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:${rootConfiguration.appcompatVersion}"
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation "androidx.constraintlayout:constraintlayout:${rootConfiguration.constraintLayoutVersion}"
     testImplementation "junit:junit:${rootConfiguration.jUnitVersion}"
     androidTestImplementation "androidx.test:runner:${rootConfiguration.androidXTestCoreVersion}"
-
 
 
     //Retrofit - Network calls
@@ -65,6 +64,41 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$rootConfiguration.archLifecycleVersion"
 
 
+    //Testing
+    //coroutines tests
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootConfiguration.coroutineTestVersion"
+
+    //androidX testing
+    testImplementation "androidx.test:runner:$rootConfiguration.androidXTestCoreVersion"
+    testImplementation "androidx.test:rules:$rootConfiguration.androidXTestCoreVersion"
+    testImplementation "androidx.test:core:$rootConfiguration.androidXTestCoreVersion"
+    testImplementation "androidx.test:core-ktx:$rootConfiguration.androidXTestCoreVersion"
+    testImplementation "androidx.arch.core:core-testing:$rootConfiguration.testingCore"
+    androidTestImplementation "androidx.test:core:$rootConfiguration.androidXTestCoreVersion"
+    androidTestImplementation "androidx.test:core-ktx:$rootConfiguration.androidXTestCoreVersion"
+    androidTestImplementation "androidx.test.ext:junit:$rootConfiguration.androidJUnitVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:$rootConfiguration.testingCore"
+
+    //AndroidJUnitRunner and JUnit Rules
+    testImplementation "junit:junit:$rootConfiguration.jUnitVersion"
+    androidTestImplementation "androidx.test:runner:$rootConfiguration.androidXTestCoreVersion"
+    androidTestImplementation "androidx.test:rules:$rootConfiguration.androidXTestCoreVersion"
+
+    //Roboelectric
+    testImplementation("org.robolectric:robolectric:$rootConfiguration.robolectricVersion") {
+        exclude group: 'javax.inject'
+    }
+
+    //Mockito and Power mock
+    testImplementation "org.mockito:mockito-core:${rootConfiguration.mockitoVersion}"
+    testImplementation "org.powermock:powermock-api-mockito2:${rootConfiguration.powerMockVersion}"
+    androidTestImplementation "org.powermock:powermock-api-mockito2:${rootConfiguration.powerMockVersion}"
+
+
+    //Annotation, junit and espresso
+    androidTestImplementation "androidx.annotation:annotation:$rootConfiguration.androidXTestAnnotationVersion"
+    androidTestImplementation "androidx.test.ext:junit:$rootConfiguration.androidJUnitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootConfiguration.expressoVersion"
 
 }
 

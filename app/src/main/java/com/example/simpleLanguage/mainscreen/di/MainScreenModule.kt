@@ -19,8 +19,8 @@ class MainScreenModule{
 
     @Provides
     @ActivityScope
-    fun providesMainScreenRepository(mainScreenAPI: MainAPI): MainScreenRepository {
-        return MainScreenDownloader(mainScreenAPI)
+    fun providesMainScreenRepository(mainAPI: MainAPI): MainScreenRepository {
+        return MainScreenDownloader(mainAPI)
     }
 
     @Provides
