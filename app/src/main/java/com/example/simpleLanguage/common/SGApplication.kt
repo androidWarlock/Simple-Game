@@ -19,6 +19,9 @@ open class SGApplication : DaggerApplication(), LifecycleObserver {
     override fun onCreate() {
         super.onCreate()
 
+        //Intializing resource util
+        ResourceUtils.initialize(applicationContext)
+
         // To make Vector drawable work on pre L
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 

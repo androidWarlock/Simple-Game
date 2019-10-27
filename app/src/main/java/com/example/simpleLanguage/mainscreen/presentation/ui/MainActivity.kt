@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         loadWords()
         viewModel.getWordsList()
+        setUpGameAnimationRunnable()
     }
 
     private fun loadWords() {
@@ -129,7 +130,6 @@ class MainActivity : AppCompatActivity() {
     // A method that returns whether the word ist off screen or not
     private fun isWordStillVisible(): Boolean {
         val screenBound = Rect(0, 0, ResourceUtils.getScreenwidth(), ResourceUtils.getScreenHeight())
-
         return moving_word_textView.getLocalVisibleRect(screenBound)
     }
 
