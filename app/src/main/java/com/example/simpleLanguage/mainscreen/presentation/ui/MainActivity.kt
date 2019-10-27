@@ -97,6 +97,23 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun setUpGameAnimationRunnable() {
+        updateGameAnimationRunnable = Runnable {
+            run {
+                //Update UI
+                if (!isWordStillVisible()) {
+
+                    resetRound()
+                    return@run
+                }
+                moveWord()
+                // Re-run it after the update interval
+                updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, UPDATE_INTERVAL)
+            }
+
+        }
+    }
+
 
     // Animation of the moving word
     private fun moveWord() {
