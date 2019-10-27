@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:padding="@dimen/margin_8dp"
-        android:text="Test word"
+        android:visibility="gone"
         android:textColor="@android:color/white"
         android:textSize="@dimen/moving_word_font_size"
         app:layout_constraintEnd_toEndOf="parent"

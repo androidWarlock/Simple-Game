@@ -4,7 +4,6 @@ import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,11 +14,13 @@ import com.example.simpleLanguage.common.Status
 import com.example.simpleLanguage.common.di.SGConstants.RESET_INTERVAL
 import com.example.simpleLanguage.common.di.SGConstants.START_INTERVAL
 import com.example.simpleLanguage.common.di.SGConstants.UPDATE_INTERVAL
+import com.example.simpleLanguage.mainscreen.data.entity.Word
 import com.example.simpleLanguage.mainscreen.di.DaggerMainScreenComponent
 import com.example.simpleLanguage.mainscreen.presentation.viewmodel.MainScreenViewModel
 import com.example.simpleLanguage.mainscreen.presentation.viewmodel.MainScreenViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +32,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var updateGameAnimationRunnable: Runnable
 
     private var isGameStarted = false
+
+    private var words: List<Word> = ArrayList()
+    private var wordIndex = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,8 +69,9 @@ class MainActivity : AppCompatActivity() {
 
                 Status.SUCCESS -> {
                     if (it != null) {
-                        startGame()
                         //LoadData and start the game
+                        words = it.data as List<Word>
+                        startGame()
                     } else {
                         //Show Error Message
                     }
@@ -116,20 +121,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     // a method to start the game
-    private fun startGame(){
+    private fun startGame() {
         isGameStarted = true
+        moving_word_textView.visibility = View.VISIBLE
+
+        addWordsToTextView()
+
         updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, START_INTERVAL)
     }
 
 
     // Animation of the moving word
     private fun moveWord() {
-        moving_word_textView.animate().translationY(ResourceUtils.getScreenHeight().toFloat()).setDuration(UPDATE_INTERVAL)
+        moving_word_textView.animate().translationY(ResourceUtils.getScreenHeight().toFloat())
+            .setDuration(UPDATE_INTERVAL)
     }
 
     // A method that returns whether the word ist off screen or not
     private fun isWordStillVisible(): Boolean {
-        val screenBound = Rect(0, 0, ResourceUtils.getScreenwidth(), ResourceUtils.getScreenHeight())
+        val screenBound =
+            Rect(0, 0, ResourceUtils.getScreenwidth(), ResourceUtils.getScreenHeight())
         return moving_word_textView.getLocalVisibleRect(screenBound)
     }
 
@@ -144,7 +155,45 @@ class MainActivity : AppCompatActivity() {
     // A method that starts next round
     private fun startNextRound() {
         updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, START_INTERVAL)
-
     }
+
+
+    private fun increaseIndex() {
+        if (wordIndex == words.size) {
+            wordIndex = 0
+        } else {
+            ++wordIndex
+        }
+    }
+
+
+    // updating words with the current index
+    private fun addWordsToTextView() {
+        //adding the static word in language 1 (English)
+        static_word.text = words.get(wordIndex).text_eng
+
+        //checking if should add wrong or right word
+        if (shouldAddTheRightWord()) {
+            //if true add the right word
+            moving_word_textView.text = words.get(wordIndex).text_spa
+
+        } else {
+            //if false get random word from list
+            moving_word_textView.text = getRandomWord()
+        }
+    }
+
+    private fun shouldAddTheRightWord() = Random.nextBoolean()
+
+
+
+    private fun getRandomWord(): String {
+        val randomIndex = Random.nextInt(words.size)
+        return words[randomIndex].text_spa
+    }
+
+
+
+
 
 }
