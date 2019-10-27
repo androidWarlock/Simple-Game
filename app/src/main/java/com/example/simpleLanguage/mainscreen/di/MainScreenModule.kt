@@ -5,6 +5,7 @@ import com.example.simpleLanguage.common.di.ActivityScope
 import com.example.simpleLanguage.mainscreen.data.api.MainAPI
 import com.example.simpleLanguage.mainscreen.data.repository.MainScreenDownloader
 import com.example.simpleLanguage.mainscreen.data.repository.MainScreenRepository
+import com.example.simpleLanguage.mainscreen.presentation.viewmodel.MainScreenViewModelFactory
 import dagger.Module
 import dagger.Provides
 
@@ -22,7 +23,11 @@ class MainScreenModule{
         return MainScreenDownloader(mainScreenAPI)
     }
 
-
+    @Provides
+    @ActivityScope
+    fun providesMainScreenViewModelFactory(mainScreenRepository: MainScreenRepository): MainScreenViewModelFactory {
+        return MainScreenViewModelFactory(mainScreenRepository)
+    }
 
 
 }
