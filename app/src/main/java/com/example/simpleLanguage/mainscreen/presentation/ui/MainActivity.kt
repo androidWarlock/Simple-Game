@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.simpleLanguage.R
@@ -32,9 +33,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var updateGameAnimationRunnable: Runnable
 
     private var isGameStarted = false
+    private var isAnswered = false
 
     private var words: List<Word> = ArrayList()
     private var wordIndex = 0
+    private var translation = 50
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,11 +97,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun rightClicked(view: View) {
+        isAnswered = true
+        if (moving_word_textView.text == words[wordIndex].text_spa){
+            calculateScore(true)
+            notifyUserRightAnswer()
+        }else{
+            notifyUserWrongAnswer()
+        }
 
+
+        resetRound()
 
     }
 
     fun wrongClicked(view: View) {
+        isAnswered = true
+        if (moving_word_textView.text != words[wordIndex].text_spa){
+            calculateScore(true)
+            notifyUserRightAnswer()
+        }else{
+            notifyUserWrongAnswer()
+        }
+
+        resetRound()
 
     }
 
@@ -107,8 +128,7 @@ class MainActivity : AppCompatActivity() {
         updateGameAnimationRunnable = Runnable {
             run {
                 //Update UI
-                if (!isWordStillVisible()) {
-
+                if (!isWordStillVisible() && !isAnswered) {
                     resetRound()
                     return@run
                 }
@@ -133,8 +153,9 @@ class MainActivity : AppCompatActivity() {
 
     // Animation of the moving word
     private fun moveWord() {
-        moving_word_textView.animate().translationY(ResourceUtils.getScreenHeight().toFloat())
-            .setDuration(UPDATE_INTERVAL)
+        translation+= 50
+        moving_word_textView.animate().translationY(translation.toFloat())
+            .setDuration(100)
     }
 
     // A method that returns whether the word ist off screen or not
@@ -146,6 +167,9 @@ class MainActivity : AppCompatActivity() {
 
     // A method that resets the round either if user answer or word gets off screen
     private fun resetRound() {
+        translation= 50
+        increaseIndex()
+        isAnswered = false
         updateGameAnimationHandler.removeCallbacks(updateGameAnimationRunnable)
         moving_word_textView.clearAnimation()
         moving_word_textView.animate().y(-0f).duration = RESET_INTERVAL
@@ -154,6 +178,7 @@ class MainActivity : AppCompatActivity() {
 
     // A method that starts next round
     private fun startNextRound() {
+        addWordsToTextView()
         updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, START_INTERVAL)
     }
 
@@ -194,6 +219,19 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    private fun calculateScore(isWin : Boolean){
+        if (isWin){
+            //increase score
+        }
+    }
+
+    private fun notifyUserRightAnswer(){
+        Toast.makeText(this,ResourceUtils.getString(R.string.right_answer),Toast.LENGTH_SHORT).show()
+    }
+
+    private fun notifyUserWrongAnswer(){
+        Toast.makeText(this,ResourceUtils.getString(R.string.wrong_answer),Toast.LENGTH_SHORT).show()
+    }
 
 
 }

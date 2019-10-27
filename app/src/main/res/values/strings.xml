@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">SimpleLanguageGame</string>
     <string name="score">Score</string>
+    <string name="right_answer">You Got It Right!</string>
+    <string name="wrong_answer">Sorry Wrong answer</string>
 </resources>
