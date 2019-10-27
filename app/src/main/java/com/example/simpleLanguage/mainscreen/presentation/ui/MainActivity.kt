@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
                 Status.SUCCESS -> {
                     if (it != null) {
-                        Log.d("TEST", it.data.toString())
+                        startGame()
                         //LoadData and start the game
                     } else {
                         //Show Error Message
@@ -112,6 +112,12 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    // a method to start the game
+    private fun startGame(){
+        isGameStarted = true
+        updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, START_INTERVAL)
     }
 
 
