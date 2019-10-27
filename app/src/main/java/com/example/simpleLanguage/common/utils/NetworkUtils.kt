@@ -10,6 +10,7 @@ import java.net.Socket
 
 class NetworkUtil {
     companion object {
+        //Connect to a Socket on the Internet Google DNS to check if there's internet or not. Very fast and reliable
         fun hasInternetConnection(): Single<Boolean> {
             return Single.fromCallable {
                 try {

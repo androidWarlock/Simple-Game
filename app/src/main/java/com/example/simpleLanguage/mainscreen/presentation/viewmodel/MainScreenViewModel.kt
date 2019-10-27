@@ -16,6 +16,10 @@ import java.io.IOException
  * This is the viewModel for MainScreen
  */
 class MainScreenViewModel(var repo: MainScreenRepository): ViewModel(){
+    var wordsList : List<Word> = ArrayList()
+    var isGameStarted = false
+    var isAnswered = false
+    var wordIndex = 0
 
     private var scorecounter = 0
     private val _score = MutableLiveData<Int>()
@@ -33,6 +37,7 @@ class MainScreenViewModel(var repo: MainScreenRepository): ViewModel(){
 
      fun getWordsList(){
         viewModelScope.launch (Dispatchers.Main + wordsExceptionHandler) {
+            _words.value = Resource.loading(null) as Resource<List<Word>>
             val words = repo.getWordsList()
             if (!words.isNullOrEmpty()){
                 _words.value = Resource.success(words)

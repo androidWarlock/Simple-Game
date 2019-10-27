@@ -34,11 +34,7 @@ class MainActivity : AppCompatActivity() {
     private val updateGameAnimationHandler = Handler()
     private lateinit var updateGameAnimationRunnable: Runnable
 
-    private var isGameStarted = false
-    private var isAnswered = false
 
-    private var words: List<Word> = ArrayList()
-    private var wordIndex = 0
     private var translation = 50
 
 
@@ -85,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                     showLoading(false)
                     if (it != null) {
                         //LoadData and start the game
-                        words = it.data as List<Word>
+                        viewModel.wordsList = it.data as List<Word>
                         startGame()
                     } else {
                         //Show Error Message
@@ -108,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         //handling game to continue after being in background
-        if (isGameStarted)
+        if (viewModel.isGameStarted)
             updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, START_INTERVAL)
     }
 
@@ -126,8 +122,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        isAnswered = true
-        if (moving_word_textView.text == words[wordIndex].text_spa) {
+        viewModel.isAnswered = true
+        if (moving_word_textView.text == viewModel.wordsList[viewModel.wordIndex].text_spa) {
             calculateScore(true)
             notifyUserRightAnswer()
         } else {
@@ -144,8 +140,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        isAnswered = true
-        if (moving_word_textView.text != words[wordIndex].text_spa) {
+        viewModel.isAnswered = true
+        if (moving_word_textView.text != viewModel.wordsList[viewModel.wordIndex].text_spa) {
             calculateScore(true)
             notifyUserRightAnswer()
         } else {
@@ -163,13 +159,13 @@ class MainActivity : AppCompatActivity() {
             run {
                 //Update UI
 
-                moving_word_textView.visibility = View.VISIBLE
 
-                if (!isWordStillVisible() && !isAnswered) {
+                if (!isWordStillVisible() && !viewModel.isAnswered) {
                     resetRound()
                     return@run
                 }
                 moveWord()
+                moving_word_textView.visibility = View.VISIBLE
 
                 // Re-run it after the update interval
                 updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, UPDATE_INTERVAL)
@@ -181,7 +177,7 @@ class MainActivity : AppCompatActivity() {
 
     // a method to start the game
     private fun startGame() {
-        isGameStarted = true
+        viewModel.isGameStarted = true
         moving_word_textView.visibility = View.VISIBLE
 
         addWordsToTextView()
@@ -194,7 +190,7 @@ class MainActivity : AppCompatActivity() {
     private fun moveWord() {
         translation += 50
         moving_word_textView.animate().translationY(translation.toFloat())
-            .setDuration(100)
+            .setDuration(RESET_INTERVAL)
     }
 
 
@@ -208,13 +204,14 @@ class MainActivity : AppCompatActivity() {
 
     // A method that resets the round either if user answer or word gets off screen
     private fun resetRound() {
-        moving_word_textView.visibility = View.GONE
         translation = 50
         increaseIndex()
-        isAnswered = false
+        viewModel.isAnswered = false
         updateGameAnimationHandler.removeCallbacks(updateGameAnimationRunnable)
         moving_word_textView.clearAnimation()
-        moving_word_textView.animate().y(-0f).setDuration(100).setStartDelay(RESET_INTERVAL)
+        moving_word_textView.visibility = View.GONE
+
+        moving_word_textView.animate().y(-0f).setDuration(100)
         startNextRound()
     }
 
@@ -227,10 +224,10 @@ class MainActivity : AppCompatActivity() {
 
     // A method to increase words index and start over when reach end
     private fun increaseIndex() {
-        if (wordIndex == words.size) {
-            wordIndex = 0
+        if (viewModel.wordIndex == viewModel.wordsList.size) {
+            viewModel.wordIndex = 0
         } else {
-            ++wordIndex
+            viewModel.wordIndex++
         }
     }
 
@@ -238,12 +235,12 @@ class MainActivity : AppCompatActivity() {
     // updating words with the current index
     private fun addWordsToTextView() {
         //adding the static word in language 1 (English)
-        static_word.text = words.get(wordIndex).text_eng
+        static_word.text = viewModel.wordsList[viewModel.wordIndex].text_eng
 
         //checking if should add wrong or right word
         if (shouldAddTheRightWord()) {
             //if true add the right word
-            moving_word_textView.text = words.get(wordIndex).text_spa
+            moving_word_textView.text = viewModel.wordsList[viewModel.wordIndex].text_spa
 
         } else {
             //if false get random word from list
@@ -258,8 +255,8 @@ class MainActivity : AppCompatActivity() {
 
     // A method that returns a random word from the words list
     private fun getRandomWord(): String {
-        val randomIndex = Random.nextInt(words.size)
-        return words[randomIndex].text_spa
+        val randomIndex = Random.nextInt(viewModel.wordsList.size)
+        return viewModel.wordsList[randomIndex].text_spa
     }
 
 
