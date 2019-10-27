@@ -1,4 +1,4 @@
-package com.example.simpleLanguage.common
+package com.example.simpleLanguage.common.utils
 
 import com.example.simpleLanguage.BuildConfig
 import okhttp3.OkHttpClient

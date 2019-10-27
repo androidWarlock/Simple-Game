@@ -1,7 +1,5 @@
 package com.example.simpleLanguage.mainscreen.presentation.ui
 
-import android.graphics.Color
-import android.graphics.ColorFilter
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,12 +10,13 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.simpleLanguage.R
-import com.example.simpleLanguage.common.ResourceUtils
+import com.example.simpleLanguage.common.utils.ResourceUtils
 import com.example.simpleLanguage.common.SGApplication
 import com.example.simpleLanguage.common.Status
 import com.example.simpleLanguage.common.di.SGConstants.RESET_INTERVAL
 import com.example.simpleLanguage.common.di.SGConstants.START_INTERVAL
 import com.example.simpleLanguage.common.di.SGConstants.UPDATE_INTERVAL
+import com.example.simpleLanguage.common.utils.NetworkUtil.Companion.hasInternetConnection
 import com.example.simpleLanguage.mainscreen.data.entity.Word
 import com.example.simpleLanguage.mainscreen.di.DaggerMainScreenComponent
 import com.example.simpleLanguage.mainscreen.presentation.viewmodel.MainScreenViewModel
@@ -74,18 +73,23 @@ class MainActivity : AppCompatActivity() {
     private fun loadWords() {
         viewModel.words.observe(this, Observer {
             when (it.status) {
-                Status.LOADING -> return@Observer
+                Status.LOADING -> showLoading(true)
 
                 Status.ERROR,
-                Status.NETWORK_ERROR -> return@Observer
+                Status.NETWORK_ERROR -> {
+                    showLoading(false)
+                    noContent()
+                }
 
                 Status.SUCCESS -> {
+                    showLoading(false)
                     if (it != null) {
                         //LoadData and start the game
                         words = it.data as List<Word>
                         startGame()
                     } else {
                         //Show Error Message
+                        noContent()
                     }
                 }
             }
@@ -204,12 +208,12 @@ class MainActivity : AppCompatActivity() {
 
     // A method that resets the round either if user answer or word gets off screen
     private fun resetRound() {
+        moving_word_textView.visibility = View.GONE
         translation = 50
         increaseIndex()
         isAnswered = false
         updateGameAnimationHandler.removeCallbacks(updateGameAnimationRunnable)
         moving_word_textView.clearAnimation()
-        moving_word_textView.visibility = View.GONE
         moving_word_textView.animate().y(-0f).setDuration(100).setStartDelay(RESET_INTERVAL)
         startNextRound()
     }
@@ -265,14 +269,15 @@ class MainActivity : AppCompatActivity() {
             //increase score
             viewModel.updateScore()
         } else {
-            //TODO: FUTURE Work can add deduction if wrong answer
+            //TODO: [FUTURE Work] can add deduction if wrong answer
         }
     }
 
 
     //a method to notify the user he answered right. For simplicity i used Toast
     private fun notifyUserRightAnswer() {
-        val toast = Toast.makeText(this, ResourceUtils.getString(R.string.right_answer), Toast.LENGTH_SHORT)
+        val toast =
+            Toast.makeText(this, ResourceUtils.getString(R.string.right_answer), Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.CENTER, 0, 0)
         toast.show()
     }
@@ -280,11 +285,30 @@ class MainActivity : AppCompatActivity() {
 
     //a method to notify the user he answered wrong. For simplicity i used Toast
     private fun notifyUserWrongAnswer() {
-        val toast = Toast.makeText(this, ResourceUtils.getString(R.string.wrong_answer), Toast.LENGTH_SHORT)
+        val toast =
+            Toast.makeText(this, ResourceUtils.getString(R.string.wrong_answer), Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.CENTER, 0, 0)
         val view = toast.view
         toast.show()
     }
 
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            loading_progressbar.visibility = View.VISIBLE
+            no_content.visibility = View.GONE
+        } else {
+            loading_progressbar.visibility = View.GONE
+        }
+    }
+
+    private fun noContent() {
+        game_group.visibility = View.GONE
+        no_content.visibility = View.VISIBLE
+        hasInternetConnection().subscribe { hasInternet ->
+            if (!hasInternet) no_content.text = ResourceUtils.getString(R.string.no_internet)
+            else no_content.text = ResourceUtils.getString(R.string.error_message)
+        }.isDisposed
+    }
 
 }

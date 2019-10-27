@@ -64,6 +64,12 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$rootConfiguration.archLifecycleVersion"
 
 
+    //RxAndroid
+    implementation "io.reactivex.rxjava2:rxandroid:$rootConfiguration.rxAndroidVersion"
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    implementation "io.reactivex.rxjava2:rxjava:$rootConfiguration.rxJavaVersion"
+
     //Testing
     //coroutines tests
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootConfiguration.coroutineTestVersion"

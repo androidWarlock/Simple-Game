@@ -1,6 +1,6 @@
 package com.example.simpleLanguage.mainscreen.di
 
-import com.example.simpleLanguage.common.ApiUtils
+import com.example.simpleLanguage.common.utils.ApiUtils
 import com.example.simpleLanguage.common.di.ActivityScope
 import com.example.simpleLanguage.mainscreen.data.api.MainAPI
 import com.example.simpleLanguage.mainscreen.data.repository.MainScreenDownloader

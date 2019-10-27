@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">SimpleLanguageGame</string>
     <string name="score">Score</string>
-    <string name="right_answer">You Got It Right!</string>
-    <string name="wrong_answer">Sorry Wrong answer</string>
+    <string name="right_answer">You Got It Right!!</string>
+    <string name="wrong_answer">Sorry Wrong Answer</string>
+    <string name="no_internet">No Connection. Please check your connection and try again.</string>
+    <string name="error_message">Something went wrong please try again later.</string>
 </resources>

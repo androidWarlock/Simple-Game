@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.example.simpleLanguage.common.di.AppComponent
 import com.example.simpleLanguage.common.di.DaggerAppComponent
+import com.example.simpleLanguage.common.utils.ResourceUtils
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 

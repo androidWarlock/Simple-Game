@@ -53,6 +53,7 @@ class MainScreenViewModel(var repo: MainScreenRepository): ViewModel(){
         _score.value = scorecounter
     }
 
+
     fun resetScore(){
         scorecounter = 0
     }
