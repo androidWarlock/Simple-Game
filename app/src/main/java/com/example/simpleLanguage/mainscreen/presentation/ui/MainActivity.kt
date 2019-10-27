@@ -2,9 +2,12 @@ package com.example.simpleLanguage.mainscreen.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.simpleLanguage.R
 import com.example.simpleLanguage.common.SGApplication
+import com.example.simpleLanguage.common.Status
 import com.example.simpleLanguage.mainscreen.di.DaggerMainScreenComponent
 import com.example.simpleLanguage.mainscreen.di.MainScreenComponent
 import com.example.simpleLanguage.mainscreen.presentation.viewmodel.MainScreenViewModel
@@ -29,7 +32,35 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainScreenViewModel::class.java)
 
+        loadWords()
         viewModel.getWordsList()
     }
 
+    private fun loadWords(){
+        viewModel.words.observe(this, Observer {
+            when(it.status){
+                Status.LOADING ->{
+                    //LoadingView
+                }
+
+                Status.ERROR ,
+                Status.NETWORK_ERROR ->{
+                    //Show Error Message
+                }
+
+                Status.SUCCESS -> {
+                    if (it != null) {
+                        Log.d("TEST",it.data.toString())
+                        //LoadData and start the game
+                    }else{
+                        //Show Error Message
+                    }
+                }
+
+            }
+        })
+
+
+
+    }
 }
