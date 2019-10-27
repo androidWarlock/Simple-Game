@@ -53,6 +53,13 @@ class MainActivity : AppCompatActivity() {
         viewModel =
             ViewModelProviders.of(this, viewModelFactory).get(MainScreenViewModel::class.java)
 
+        prepareTheGame()
+    }
+
+
+
+    //getting the game environment ready
+    private fun prepareTheGame(){
         updateScore()
         loadWords()
         viewModel.getWordsList()
@@ -60,17 +67,17 @@ class MainActivity : AppCompatActivity() {
         setUpGameAnimationRunnable()
     }
 
+
+
+
+    //an observer to Words list request handling all statuses
     private fun loadWords() {
         viewModel.words.observe(this, Observer {
             when (it.status) {
-                Status.LOADING -> {
-                    //LoadingView
-                }
+                Status.LOADING -> return@Observer
 
                 Status.ERROR,
-                Status.NETWORK_ERROR -> {
-                    //Show Error Message
-                }
+                Status.NETWORK_ERROR -> return@Observer
 
                 Status.SUCCESS -> {
                     if (it != null) {
@@ -86,6 +93,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+
+// observer to score variable to update UI whenever changed.
     private fun updateScore(){
         viewModel.score.observe(this, Observer {
             score_counter.text = it.toString()
@@ -93,19 +103,33 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+
     override fun onResume() {
         super.onResume()
+        //handling game to continue after being in background
         if (isGameStarted)
             updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, START_INTERVAL)
     }
 
 
+
+
     override fun onPause() {
         super.onPause()
+        //handling game to pause after being going to background
         updateGameAnimationHandler.removeCallbacks(updateGameAnimationRunnable)
     }
 
+
+
+
+    //the method that will be called when user click the right button
     fun rightClicked(view: View) {
+        if (!isWordStillVisible() || moving_word_textView.visibility == View.GONE){
+            return
+        }
+
         isAnswered = true
         if (moving_word_textView.text == words[wordIndex].text_spa){
             calculateScore(true)
@@ -114,12 +138,18 @@ class MainActivity : AppCompatActivity() {
             notifyUserWrongAnswer()
         }
 
-
         resetRound()
 
     }
 
+
+
+
     fun wrongClicked(view: View) {
+        if (!isWordStillVisible() || moving_word_textView.visibility == View.GONE){
+            return
+        }
+
         isAnswered = true
         if (moving_word_textView.text != words[wordIndex].text_spa){
             calculateScore(true)
@@ -133,21 +163,30 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+    //intializing the GameAnimation Runnable
     private fun setUpGameAnimationRunnable() {
         updateGameAnimationRunnable = Runnable {
             run {
                 //Update UI
+
+                moving_word_textView.visibility = View.VISIBLE
+
                 if (!isWordStillVisible() && !isAnswered) {
                     resetRound()
                     return@run
                 }
                 moveWord()
+
                 // Re-run it after the update interval
                 updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, UPDATE_INTERVAL)
             }
 
         }
     }
+
+
+
 
     // a method to start the game
     private fun startGame() {
@@ -160,12 +199,18 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+
+
     // Animation of the moving word
     private fun moveWord() {
-        translation+= 50
+        translation += 50
         moving_word_textView.animate().translationY(translation.toFloat())
             .setDuration(100)
     }
+
+
+
 
     // A method that returns whether the word ist off screen or not
     private fun isWordStillVisible(): Boolean {
@@ -174,24 +219,31 @@ class MainActivity : AppCompatActivity() {
         return moving_word_textView.getLocalVisibleRect(screenBound)
     }
 
+
+
+
     // A method that resets the round either if user answer or word gets off screen
     private fun resetRound() {
-        translation= 50
+        translation = 50
         increaseIndex()
         isAnswered = false
         updateGameAnimationHandler.removeCallbacks(updateGameAnimationRunnable)
         moving_word_textView.clearAnimation()
-        moving_word_textView.animate().y(-0f).duration = RESET_INTERVAL
+        moving_word_textView.visibility = View.GONE
+        moving_word_textView.animate().y(-0f).setDuration(100).setStartDelay(RESET_INTERVAL)
         startNextRound()
     }
 
+
+
+
     // A method that starts next round
     private fun startNextRound() {
-        addWordsToTextView()
         updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, START_INTERVAL)
+        addWordsToTextView()
     }
 
-
+    // A method to increase words index and start over when reach end
     private fun increaseIndex() {
         if (wordIndex == words.size) {
             wordIndex = 0
@@ -199,6 +251,8 @@ class MainActivity : AppCompatActivity() {
             ++wordIndex
         }
     }
+
+
 
 
     // updating words with the current index
@@ -217,10 +271,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+
+
+    // A method that returns a random boolean deciding wether to add the right or the wrong word each time
     private fun shouldAddTheRightWord() = Random.nextBoolean()
 
 
 
+
+    // A method that returns a random word from the words list
     private fun getRandomWord(): String {
         val randomIndex = Random.nextInt(words.size)
         return words[randomIndex].text_spa
@@ -228,19 +288,34 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun calculateScore(isWin : Boolean){
-        if (isWin){
+
+    //A method to reflect player answers on his score
+    private fun calculateScore(isWin: Boolean) {
+        if (isWin) {
             //increase score
             viewModel.updateScore()
+        }else{
+            //TODO: FUTURE Work can add deduction if wrong answer
         }
     }
 
-    private fun notifyUserRightAnswer(){
-        Toast.makeText(this,ResourceUtils.getString(R.string.right_answer),Toast.LENGTH_SHORT).show()
+
+
+
+    //a method to notify the user he answered right. For simplicity i used Toast
+    private fun notifyUserRightAnswer() {
+        Toast.makeText(this, ResourceUtils.getString(R.string.right_answer), Toast.LENGTH_SHORT)
+            .show()
     }
 
-    private fun notifyUserWrongAnswer(){
-        Toast.makeText(this,ResourceUtils.getString(R.string.wrong_answer),Toast.LENGTH_SHORT).show()
+
+
+
+
+    //a method to notify the user he answered wrong. For simplicity i used Toast
+    private fun notifyUserWrongAnswer() {
+        Toast.makeText(this, ResourceUtils.getString(R.string.wrong_answer), Toast.LENGTH_SHORT)
+            .show()
     }
 
 
