@@ -3,6 +3,7 @@ package com.example.simpleLanguage.mainscreen.presentation.ui
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
@@ -11,6 +12,8 @@ import com.example.simpleLanguage.R
 import com.example.simpleLanguage.common.ResourceUtils
 import com.example.simpleLanguage.common.SGApplication
 import com.example.simpleLanguage.common.Status
+import com.example.simpleLanguage.common.di.SGConstants.RESET_INTERVAL
+import com.example.simpleLanguage.common.di.SGConstants.START_INTERVAL
 import com.example.simpleLanguage.common.di.SGConstants.UPDATE_INTERVAL
 import com.example.simpleLanguage.mainscreen.di.DaggerMainScreenComponent
 import com.example.simpleLanguage.mainscreen.presentation.viewmodel.MainScreenViewModel
@@ -23,6 +26,9 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: MainScreenViewModelFactory
     private lateinit var viewModel: MainScreenViewModel
+
+    private val updateGameAnimationHandler = Handler()
+    private lateinit var updateGameAnimationRunnable: Runnable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,5 +95,18 @@ class MainActivity : AppCompatActivity() {
         return moving_word_textView.getLocalVisibleRect(screenBound)
     }
 
+    // A method that resets the round either if user answer or word gets off screen
+    private fun resetRound() {
+        updateGameAnimationHandler.removeCallbacks(updateGameAnimationRunnable)
+        moving_word_textView.clearAnimation()
+        moving_word_textView.animate().y(-0f).duration = RESET_INTERVAL
+        startNextRound()
+    }
+
+    // A method that starts next round
+    private fun startNextRound() {
+        updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, START_INTERVAL)
+
+    }
 
 }
