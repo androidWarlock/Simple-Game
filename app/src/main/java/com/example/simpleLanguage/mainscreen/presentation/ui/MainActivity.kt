@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     private val updateGameAnimationHandler = Handler()
     private lateinit var updateGameAnimationRunnable: Runnable
 
+    private var isGameStarted = false
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -71,6 +74,18 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        if (isGameStarted)
+            updateGameAnimationHandler.postDelayed(updateGameAnimationRunnable, START_INTERVAL)
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        updateGameAnimationHandler.removeCallbacks(updateGameAnimationRunnable)
+    }
 
     fun rightClicked(view: View) {
 
