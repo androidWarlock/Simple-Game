@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="moving_word_font_size">26sp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="minus_height">-300dp</dimen>
+    <dimen name="score_font_size">20sp</dimen>
+</resources>

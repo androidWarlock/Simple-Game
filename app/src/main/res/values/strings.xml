@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SimpleLanguageGame</string>
+    <string name="score">Score</string>
 </resources>
