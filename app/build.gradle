@@ -16,7 +16,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "HOME_BASE_URL", "\"https://gist.githubusercontent.com/DroidCoder/7ac6cdb4bf5e032f4c737aaafe659b33/raw/baa9fe0d586082d85db71f346e2b039c580c5804/words.json\""
+        buildConfigField "String", "HOME_BASE_URL", "\"https://gist.githubusercontent.com/DroidCoder/7ac6cdb4bf5e032f4c737aaafe659b33/raw/baa9fe0d586082d85db71f346e2b039c580c5804/words.json/\""
+        vectorDrawables.useSupportLibrary = true
 
     }
     buildTypes {
@@ -31,6 +32,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:${rootConfiguration.appcompatVersion}"
+    implementation 'androidx.core:core-ktx:1.0.2'
     implementation "androidx.constraintlayout:constraintlayout:${rootConfiguration.constraintLayoutVersion}"
     testImplementation "junit:junit:${rootConfiguration.jUnitVersion}"
     androidTestImplementation "androidx.test:runner:${rootConfiguration.androidXTestCoreVersion}"

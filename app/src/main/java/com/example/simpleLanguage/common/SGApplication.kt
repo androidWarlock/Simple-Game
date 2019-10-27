@@ -11,7 +11,7 @@ import dagger.android.DaggerApplication
 
 open class SGApplication : DaggerApplication(), LifecycleObserver {
 
-    private lateinit var mAppComponent: AppComponent
+    lateinit var mAppComponent: AppComponent
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> = mAppComponent
 
@@ -25,6 +25,7 @@ open class SGApplication : DaggerApplication(), LifecycleObserver {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
     }
+
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         initDaggerComponent()
