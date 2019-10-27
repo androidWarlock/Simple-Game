@@ -10,7 +10,6 @@ import com.example.simpleLanguage.R
 import com.example.simpleLanguage.common.SGApplication
 import com.example.simpleLanguage.common.Status
 import com.example.simpleLanguage.mainscreen.di.DaggerMainScreenComponent
-import com.example.simpleLanguage.mainscreen.di.MainScreenComponent
 import com.example.simpleLanguage.mainscreen.presentation.viewmodel.MainScreenViewModel
 import com.example.simpleLanguage.mainscreen.presentation.viewmodel.MainScreenViewModelFactory
 import javax.inject.Inject
@@ -58,11 +57,9 @@ class MainActivity : AppCompatActivity() {
                         //Show Error Message
                     }
                 }
-
             }
         })
     }
-
 
 
     fun rightClicked(view: View) {
