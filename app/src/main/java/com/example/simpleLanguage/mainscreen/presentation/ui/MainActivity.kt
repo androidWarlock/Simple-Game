@@ -1,9 +1,12 @@
 package com.example.simpleLanguage.mainscreen.presentation.ui
 
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -57,17 +60,14 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     //getting the game environment ready
-    private fun prepareTheGame(){
+    private fun prepareTheGame() {
         updateScore()
         loadWords()
         viewModel.getWordsList()
         viewModel.observeScore()
         setUpGameAnimationRunnable()
     }
-
-
 
 
     //an observer to Words list request handling all statuses
@@ -93,16 +93,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
-// observer to score variable to update UI whenever changed.
-    private fun updateScore(){
+    // observer to score variable to update UI whenever changed.
+    private fun updateScore() {
         viewModel.score.observe(this, Observer {
             score_counter.text = it.toString()
         })
     }
-
-
 
 
     override fun onResume() {
@@ -113,8 +109,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     override fun onPause() {
         super.onPause()
         //handling game to pause after being going to background
@@ -122,46 +116,41 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     //the method that will be called when user click the right button
     fun rightClicked(view: View) {
-        if (!isWordStillVisible() || moving_word_textView.visibility == View.GONE){
+        if (!isWordStillVisible() || moving_word_textView.visibility == View.GONE) {
             return
         }
 
         isAnswered = true
-        if (moving_word_textView.text == words[wordIndex].text_spa){
+        if (moving_word_textView.text == words[wordIndex].text_spa) {
             calculateScore(true)
             notifyUserRightAnswer()
-        }else{
+        } else {
             notifyUserWrongAnswer()
         }
 
         resetRound()
 
     }
-
-
 
 
     fun wrongClicked(view: View) {
-        if (!isWordStillVisible() || moving_word_textView.visibility == View.GONE){
+        if (!isWordStillVisible() || moving_word_textView.visibility == View.GONE) {
             return
         }
 
         isAnswered = true
-        if (moving_word_textView.text != words[wordIndex].text_spa){
+        if (moving_word_textView.text != words[wordIndex].text_spa) {
             calculateScore(true)
             notifyUserRightAnswer()
-        }else{
+        } else {
             notifyUserWrongAnswer()
         }
 
         resetRound()
 
     }
-
 
 
     //intializing the GameAnimation Runnable
@@ -186,8 +175,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     // a method to start the game
     private fun startGame() {
         isGameStarted = true
@@ -199,9 +186,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
-
     // Animation of the moving word
     private fun moveWord() {
         translation += 50
@@ -210,16 +194,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     // A method that returns whether the word ist off screen or not
     private fun isWordStillVisible(): Boolean {
         val screenBound =
             Rect(0, 0, ResourceUtils.getScreenwidth(), ResourceUtils.getScreenHeight())
         return moving_word_textView.getLocalVisibleRect(screenBound)
     }
-
-
 
 
     // A method that resets the round either if user answer or word gets off screen
@@ -233,8 +213,6 @@ class MainActivity : AppCompatActivity() {
         moving_word_textView.animate().y(-0f).setDuration(100).setStartDelay(RESET_INTERVAL)
         startNextRound()
     }
-
-
 
 
     // A method that starts next round
@@ -251,8 +229,6 @@ class MainActivity : AppCompatActivity() {
             ++wordIndex
         }
     }
-
-
 
 
     // updating words with the current index
@@ -272,12 +248,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     // A method that returns a random boolean deciding wether to add the right or the wrong word each time
     private fun shouldAddTheRightWord() = Random.nextBoolean()
-
-
 
 
     // A method that returns a random word from the words list
@@ -287,35 +259,31 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     //A method to reflect player answers on his score
     private fun calculateScore(isWin: Boolean) {
         if (isWin) {
             //increase score
             viewModel.updateScore()
-        }else{
+        } else {
             //TODO: FUTURE Work can add deduction if wrong answer
         }
     }
 
 
-
-
     //a method to notify the user he answered right. For simplicity i used Toast
     private fun notifyUserRightAnswer() {
-        Toast.makeText(this, ResourceUtils.getString(R.string.right_answer), Toast.LENGTH_SHORT)
-            .show()
+        val toast = Toast.makeText(this, ResourceUtils.getString(R.string.right_answer), Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER, 0, 0)
+        toast.show()
     }
-
-
-
 
 
     //a method to notify the user he answered wrong. For simplicity i used Toast
     private fun notifyUserWrongAnswer() {
-        Toast.makeText(this, ResourceUtils.getString(R.string.wrong_answer), Toast.LENGTH_SHORT)
-            .show()
+        val toast = Toast.makeText(this, ResourceUtils.getString(R.string.wrong_answer), Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER, 0, 0)
+        val view = toast.view
+        toast.show()
     }
 
 
