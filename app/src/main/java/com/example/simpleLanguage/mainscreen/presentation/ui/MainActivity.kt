@@ -1,5 +1,6 @@
 package com.example.simpleLanguage.mainscreen.presentation.ui
 
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -7,11 +8,14 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.simpleLanguage.R
+import com.example.simpleLanguage.common.ResourceUtils
 import com.example.simpleLanguage.common.SGApplication
 import com.example.simpleLanguage.common.Status
+import com.example.simpleLanguage.common.di.SGConstants.UPDATE_INTERVAL
 import com.example.simpleLanguage.mainscreen.di.DaggerMainScreenComponent
 import com.example.simpleLanguage.mainscreen.presentation.viewmodel.MainScreenViewModel
 import com.example.simpleLanguage.mainscreen.presentation.viewmodel.MainScreenViewModelFactory
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -70,4 +74,20 @@ class MainActivity : AppCompatActivity() {
     fun wrongClicked(view: View) {
 
     }
+
+
+
+    // Animation of the moving word
+    private fun moveWord() {
+        moving_word_textView.animate().translationY(ResourceUtils.getScreenHeight().toFloat()).setDuration(UPDATE_INTERVAL)
+    }
+
+    // A method that returns whether the word ist off screen or not
+    private fun isWordStillVisible(): Boolean {
+        val screenBound = Rect(0, 0, ResourceUtils.getScreenwidth(), ResourceUtils.getScreenHeight())
+
+        return moving_word_textView.getLocalVisibleRect(screenBound)
+    }
+
+
 }
