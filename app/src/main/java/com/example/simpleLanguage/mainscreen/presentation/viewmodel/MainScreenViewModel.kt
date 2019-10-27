@@ -17,6 +17,11 @@ import java.io.IOException
  */
 class MainScreenViewModel(var repo: MainScreenRepository): ViewModel(){
 
+    private var scorecounter = 0
+    private val _score = MutableLiveData<Int>()
+    val score: LiveData<Int>
+    get() = _score
+
     private val _words = MutableLiveData<Resource<List<Word>>>()
     val words: LiveData<Resource<List<Word>>>
         get() = _words
@@ -37,6 +42,20 @@ class MainScreenViewModel(var repo: MainScreenRepository): ViewModel(){
         }
     }
 
+    fun observeScore(){
+        viewModelScope.launch (Dispatchers.Main ) {
+            _score.value = scorecounter
+        }
+    }
+
+    fun updateScore(){
+        scorecounter++
+        _score.value = scorecounter
+    }
+
+    fun resetScore(){
+        scorecounter = 0
+    }
 
 
 
@@ -49,6 +68,7 @@ class MainScreenViewModel(var repo: MainScreenRepository): ViewModel(){
             _words.value = Resource.error("", null) as Resource<List<Word>>
         }
     }
+
 
 }
 

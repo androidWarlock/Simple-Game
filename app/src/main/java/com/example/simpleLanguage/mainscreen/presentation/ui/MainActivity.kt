@@ -53,8 +53,10 @@ class MainActivity : AppCompatActivity() {
         viewModel =
             ViewModelProviders.of(this, viewModelFactory).get(MainScreenViewModel::class.java)
 
+        updateScore()
         loadWords()
         viewModel.getWordsList()
+        viewModel.observeScore()
         setUpGameAnimationRunnable()
     }
 
@@ -80,6 +82,13 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        })
+    }
+
+
+    private fun updateScore(){
+        viewModel.score.observe(this, Observer {
+            score_counter.text = it.toString()
         })
     }
 
@@ -222,6 +231,7 @@ class MainActivity : AppCompatActivity() {
     private fun calculateScore(isWin : Boolean){
         if (isWin){
             //increase score
+            viewModel.updateScore()
         }
     }
 
