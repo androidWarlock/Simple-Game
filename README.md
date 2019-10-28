@@ -29,7 +29,6 @@ Also About randomizing the game. I made it in 2 steps:
 
 # decisions made because of restricted time
 
-As i didn't want to exceed the 4 hours limit i did the following. And i'm willing to improve it way way far with more few hours.
 - Design is very minimalstic. 
 - Notifying user through a simple Toast.
 - Made the game working with internet only. No caching (wanted to use Room)
@@ -39,10 +38,12 @@ As i didn't want to exceed the 4 hours limit i did the following. And i'm willin
 
 
 # what would be the first thing to improve or add if there had been more time
+As i didn't want to exceed the 4 hours limit i did the following. And i'm willing to improve it way way far with more few hours.
 By order:
+
+- Writing UI tests.
 - Adding Room db (will take max 30 mins) to make the app work offline.
 - enhance UI to be more appealing and interactive.
 - Changing from Toast to more interactive way to notify user of his result.
 - Adding more animations to make the app interactive.
-
 
