@@ -47,7 +47,9 @@ dependencies {
     // Dagger - Dependency Injection
     implementation "com.google.dagger:dagger:${rootConfiguration.daggerVersion}"
     implementation "com.google.dagger:dagger-android:$rootConfiguration.daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$rootConfiguration.daggerVersion"
+    implementation ("com.google.dagger:dagger-android-support:$rootConfiguration.daggerVersion"){
+        exclude group: "com.android.support"
+    }
     kapt "com.google.dagger:dagger-compiler:${rootConfiguration.daggerVersion}"
     kapt "com.google.dagger:dagger-android-processor:$rootConfiguration.daggerVersion"
 
